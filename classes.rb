@@ -26,4 +26,12 @@ class User(f_name, l_name, phone_no)
         @account_balance =  0
         @credit_card = []
     end 
+
+    def check_card(number, digits)
+        while !number.count("^0-9").zero? || number.empty? || number.size != digits
+            puts "Please enter a valid #{digits} digit number"
+            number = gets.gsub(/\s+/, "")
+        end
+    end
+
 end 
