@@ -36,7 +36,7 @@ class User
 
     def deposit
             prompt = TTY::Prompt.new
-            deposit_amount = prompt.select("Please enter deposit amount", ["5", "10", "20", "35", "50", "75" "100"]).to_i
+            deposit_amount = prompt.select("Please enter deposit amount", ["5", "10", "20", "35", "50", "75", "100"]).to_f
            
             if @credit_card.length != 3
             puts "Please enter your 16 digit credit card number"
@@ -61,4 +61,35 @@ class User
         @account_balance = deposit_amount        
     end 
 
+    #lets users withdraw money from their account. Gets float as withdraw value & exits once they've withdrawn, or if they've requested more than they have, or if their account balance is $0. 
+    def cash_out
+        prompt = TTY::Prompt.new
+        withdraw_value = prompt.ask("How much would you like to withdraw? Enter a number.", convert: :float, required: true) do |q|
+            q.convert(:float, "%{value} is not a valid withdrawal amount. Please enter a number.")
+        end
+            
+        if @account_balance == 0
+            puts "Your account balance is $0. You cannot withdraw funds."
+        elsif withdraw_value > @account_balance
+            puts "Your requested cash out value of #{withdraw_value} is greater than your account value."
+        elsif withdraw_value == 0.0 
+            puts "You cannot withdraw $0 from your account balance."
+        else
+            @account_balance -= withdraw_value
+            puts "We have transferred $#{withdraw_value} to the pay id associated with the phone number #{@phone_number}. Your remaining account balance is #{@account_balance}."
+        end
+           
+    end 
+
 end 
+
+
+user = User.new("Connor", "Roberts", "0407263456")
+user.deposit 
+user.cash_out
+
+
+
+
+
+    
