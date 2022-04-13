@@ -35,10 +35,10 @@ class User
     end
 
     def deposit
-        if @credit_card.length != 3
             prompt = TTY::Prompt.new
             deposit_amount = prompt.select("Please enter deposit amount", ["5", "10", "20", "35", "50", "75" "100"]).to_i
            
+            if @credit_card.length != 3
             puts "Please enter your 16 digit credit card number"
             credit_card_no = gets.gsub(/\s+/, "")
             check_card(credit_card_no, 16)
@@ -60,5 +60,5 @@ class User
         end
         @account_balance = deposit_amount        
     end 
-end 
 
+end 
