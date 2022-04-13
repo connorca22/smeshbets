@@ -17,3 +17,13 @@ class Fighter
 end 
 
 
+class User(f_name, l_name, phone_no) 
+    attr_reader :first_name, :last_name, :phone_number, :account_balance  
+    def initialize
+        @first_name =  f_name
+        @last_name =  l_name
+        @phone_number =  phone_no
+        @account_balance =  0
+        @credit_card = []
+    end 
+end 
