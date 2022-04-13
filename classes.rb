@@ -17,9 +17,9 @@ class Fighter
 end 
 
 
-class User(f_name, l_name, phone_no) 
-    attr_reader :first_name, :last_name, :phone_number, :account_balance  
-    def initialize
+class User
+    attr_reader :first_name, :last_name, :phone_number, :account_balance, :credit_card 
+    def initialize(f_name, l_name, phone_no) 
         @first_name =  f_name
         @last_name =  l_name
         @phone_number =  phone_no
@@ -34,4 +34,31 @@ class User(f_name, l_name, phone_no)
         end
     end
 
+    def deposit
+        if @credit_card.length != 3
+            prompt = TTY::Prompt.new
+            deposit_amount = prompt.select("Please enter deposit amount", ["5", "10", "20", "35", "50", "75" "100"]).to_i
+           
+            puts "Please enter your 16 digit credit card number"
+            credit_card_no = gets.gsub(/\s+/, "")
+            check_card(credit_card_no, 16)
+            credit_card_no = credit_card_no.to_i
+            @credit_card[0] = credit_card_no
+
+            puts "Please enter your 4 digit expiry date"
+            expiry_date = gets.gsub(/\s+/, "")
+            check_card(expiry_date, 4)
+            expiry_date = expiry_date.to_i
+            @credit_card[1] = expiry_date
+        #ideally would need to ensure that would print error if it was past expiry date. would need to figure out how to use current date. 
+
+            puts "Please enter your 3 digit CVV"
+            cvv = gets.gsub(/\s+/, "")
+            check_card(cvv, 3)
+            cvv = cvv.to_i
+            @credit_card[2] = cvv
+        end
+        @account_balance = deposit_amount        
+    end 
 end 
+
