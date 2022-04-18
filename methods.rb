@@ -1,4 +1,4 @@
-
+require "colorize"
 
 # checks if name input provided is an empty string, or if it's got characters that aren't letters, hyphens, apostrophes, spaces. 
 def verify_name(name) 
@@ -107,15 +107,16 @@ def place_bet
                         :won => false
                     }
                     $user.bet_history.push(betslip)
-                    $user.account_balance -= betslip[:wager]
+                    $user.account_balance -= betslip[:wager] 
+
+                    if fighting(fight[:fighter_1], fight[:fighter_2], betslip[:fighter_selected]) == betslip[:fighter_selected]
+                        $user.account_balance += (betslip[:wager] * betslip[:odds]).round(2)     #this updates the account balance if they won. 
+                        $user.bet_history[betslip[:id]][:won] = true    #this updates the won key to true if they won 
+                    end 
+                    $fight_card.delete_at(fight[:fight_card_index])   #deletes the relevant $fight_card array. 
+                    sleep(2)
+                    puts "account balance: #{$user.account_balance}. bet_history/betslip won #{$user.bet_history[betslip[:id]][:won]}. fight card size: #{$fight_card.size}"
                 end 
-                if fighting(fight[:fighter_1], fight[:fighter_2]) == betslip[:fighter_selected]
-                    $user.account_balance += (betslip[:wager] * betslip[:odds])     #this updates the account balance if they won. 
-                    $user.bet_history[betslip[:id]][:won] = true    #this updates the won key to true if they won 
-                    $fight_card.delete_at(fight[:fight_card_index])  #deletes the relevant $fight_card array. 
-                end 
-                $fight_card.delete_at(fight[:fight_card_index])
-                puts "account balance: #{$user.account_balance}. bet_history/betslip won #{$user.bet_history[betslip[:id]][:won]}. fight card size: #{$fight_card.size}"
             end 
         end 
     end         
@@ -124,7 +125,23 @@ end
 
 
 
-def fighting(fighter_1, fighter_2)
-    return fighter_1
+def fighting(fighter_1, fighter_2, fighter_selected)
+    random = rand(0.8..1.4)
+    fighter_1_chance_score = fighter_1.fighter_score * random 
+    fighter_2_chance_score = fighter_2.fighter_score * random 
+
+    fighter_1_chance_score > fighter_2_chance_score ? winner = fighter_1 : winner = fighter_2
+    fighter_1_chance_score > fighter_2_chance_score ? loser = fighter_2 : loser = fighter_1  
+    sleep(2)
+    if winner == fighter_selected 
+        puts "#{fighter_selected.full_name} won the fight! You've won your bet!".colorize(:green)
+        return winner 
+    else 
+        puts "#{fighter_selected.full_name} lost the fight. You've lost your bet".colorize(:red)
+        return winner
+    end 
 end 
+
+
+
 
