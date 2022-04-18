@@ -4,7 +4,7 @@ require "tty-prompt"
 
 class Fighter
     attr_reader :first_name, :last_name, :grappling_score, :striking_score, :power_score, :full_name
-    attr_accessor :fight_complete, :damage, :fighter_score
+    attr_accessor :fight_complete, :damage, :fighter_score :bet_history
     def initialize 
         @first_name = Faker::Name.male_first_name
         @last_name = Faker::Name.last_name
@@ -16,7 +16,7 @@ class Fighter
         @fight_complete = false 
         @damage = 0
     end 
-    
+
     def set_fighter_score 
         @fighter_score = @grappling_score +  @striking_score + @power_score
     end 
@@ -31,6 +31,7 @@ class User
         @phone_number =  phone_no
         @account_balance =  0
         @credit_card = []
+        @bet_history = []
     end 
 
     def check_card(number, digits)
