@@ -27,3 +27,20 @@ $fight_card.each do |i|
     i[0].set_fighter_score 
     i[1].set_fighter_score
 end 
+
+#home menu - put below in a loop 
+
+program_active = true 
+while program_active 
+home_menu_select = prompt.select("What would you like to do?", ["Place Bet", "Deposit Funds", "Withdraw Funds", "Exit"]) 
+    if home_menu_select == "Place Bet"
+        place_bet 
+    elsif home_menu_select == "Deposit Funds"
+        $user.deposit 
+    elsif home_menu_select == "Withdraw Funds"
+        $user.cash_out 
+    elsif home_menu_select == "Exit"
+        program_active = false 
+        puts font.write("GOODBYE")
+    end 
+end 
