@@ -21,3 +21,9 @@ $user = User.new(first_name, last_name, phone_number)
 
 #Creates all fighters 
 $fight_card = [[Fighter.new, Fighter.new], [Fighter.new, Fighter.new], [Fighter.new, Fighter.new], [Fighter.new, Fighter.new], [Fighter.new, Fighter.new]]
+
+#sets their fighter_scores using the Fighter class method. 
+$fight_card.each do |i| 
+    i[0].set_fighter_score 
+    i[1].set_fighter_score
+end 
