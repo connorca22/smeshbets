@@ -25,7 +25,7 @@ end
 
 class User
     attr_reader :first_name, :last_name, :phone_number, :account_balance, :credit_card
-    attr_accessor :bet_history
+    attr_accessor :bet_history, :account_balance
     def initialize(f_name, l_name, phone_no) 
         @first_name =  f_name
         @last_name =  l_name
