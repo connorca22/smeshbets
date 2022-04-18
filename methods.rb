@@ -50,67 +50,74 @@ def place_bet
         end 
         prompt = TTY::Prompt.new
         fight_select = prompt.select("Which upcoming fight would you like to bet on?", [fight_options, "Back"])
-        
-        #creates a fight hash which will store the selected fighters, their odds, and their index in $fight_card.
-        #then populates it with relevant data based on user's fight_select pick 
-        fight =  {} 
-        counter = 0 
-        while counter < $fight_card.size      
-            if fight_select.include? $fight_card[counter][0].full_name
-                fight[:fight_card_index] = counter 
-                fight[:fighter_1] = $fight_card[counter][0]
-                fight[:fighter_2] = $fight_card[counter][1]
-                range = fight[:fighter_1].fighter_score + fight[:fighter_2].fighter_score
-                fight[:fighter_1_odds] = generate_odds(range, fight[:fighter_1].fighter_score)  
-                fight[:fighter_2_odds] = generate_odds(range, fight[:fighter_2].fighter_score) 
+        if fight_select == "Back"
+            return 
+        else  
+            #creates a fight hash which will store the selected fighters, their odds, and their index in $fight_card.
+            #then populates it with relevant data based on user's fight_select pick 
+            fight =  {} 
+            counter = 0 
+            while counter < $fight_card.size      
+                if fight_select.include? $fight_card[counter][0].full_name
+                    fight[:fight_card_index] = counter 
+                    fight[:fighter_1] = $fight_card[counter][0]
+                    fight[:fighter_2] = $fight_card[counter][1]
+                    range = fight[:fighter_1].fighter_score + fight[:fighter_2].fighter_score
+                    fight[:fighter_1_odds] = generate_odds(range, fight[:fighter_1].fighter_score)  
+                    fight[:fighter_2_odds] = generate_odds(range, fight[:fighter_2].fighter_score) 
+                end 
+                counter += 1 
             end 
-            counter += 1 
-        end 
 
-        #creates a hash that we'll pass to tty prompt object to choose between the two fighters
-        fighter_options = [
-            {name: "#{fight[:fighter_1].full_name} at #{fight[:fighter_1_odds]} to 1", value: 1},
-            {name: "#{fight[:fighter_2].full_name} at #{fight[:fighter_2_odds]} to 1", value: 2}
-        ] 
-        fighter_choice = prompt.select("Which upcoming fight would you like to bet on?", [fighter_options, "Back"])  
-        
-        #identifies the user's choice and stores their choice in fight hash. 
-        if fighter_choice == 1 
-            fight[:fighter_selection] = fight[:fighter_1]
-            fight[:fighter_selection_odds] = fight[:fighter_1_odds]
-        elsif fighter_choice == 2 
-            fight[:fighter_selection] = fight[:fighter_2]
-            fight[:fighter_selection_odds] = fight[:fighter_2_odds]
-        end 
+            #creates a hash that we'll pass to tty prompt object to choose between the two fighters
+            fighter_options = [
+                {name: "#{fight[:fighter_1].full_name} at #{fight[:fighter_1_odds]} to 1", value: 1},
+                {name: "#{fight[:fighter_2].full_name} at #{fight[:fighter_2_odds]} to 1", value: 2}
+            ] 
+            fighter_choice = prompt.select("Which upcoming fight would you like to bet on?", [fighter_options, "Back"])  
+            
+            if fighter_choice == "Back"
+                return 
+            else 
+                #identifies the user's choice and stores their choice in fight hash. 
+                if fighter_choice == 1 
+                    fight[:fighter_selection] = fight[:fighter_1]
+                    fight[:fighter_selection_odds] = fight[:fighter_1_odds]
+                elsif fighter_choice == 2 
+                    fight[:fighter_selection] = fight[:fighter_2]
+                    fight[:fighter_selection_odds] = fight[:fighter_2_odds]
+                end 
 
-        #requests wager amount, if it exceeds account balance or is outside of the valid range it will exit back to start menu
-        #otherwise if will continue execution in a nested if statement. 
-        wager_amount = prompt.ask("Enter dollar value of bet between $1 and $10,000", convert: :float) do |q|
-            q.convert(:float, "%{value} is not a valid bet amount. Please enter a dollar value of bet using only numbers")
-        end
+                #requests wager amount, if it exceeds account balance or is outside of the valid range it will exit back to start menu
+                #otherwise if will continue execution in a nested if statement. 
+                wager_amount = prompt.ask("Enter dollar value of bet between $1 and $10,000", convert: :float) do |q|
+                    q.convert(:float, "%{value} is not a valid bet amount. Please enter a dollar value of bet using only numbers")
+                end
 
-        if wager_amount > $user.account_balance 
-            puts "You do not have sufficient funds in your account to place this bet"
-        elsif wager_amount > 10000 || wager_amount < 1 
-            puts "You can only place bets between $1 and $10,000"
-        else 
-            betslip = {
-                :id => $user.bet_history.size, 
-                :fighter_selected => fight[:fighter_selection],
-                :wager => wager_amount,
-                :odds => fight[:fighter_selection_odds],
-                :won => false
-            }
-            $user.bet_history.push(betslip)
-            $user.account_balance -= betslip[:wager]
+                if wager_amount > $user.account_balance 
+                    puts "You do not have sufficient funds in your account to place this bet"
+                elsif wager_amount > 10000 || wager_amount < 1 
+                    puts "You can only place bets between $1 and $10,000"
+                else 
+                    betslip = {
+                        :id => $user.bet_history.size, 
+                        :fighter_selected => fight[:fighter_selection],
+                        :wager => wager_amount,
+                        :odds => fight[:fighter_selection_odds],
+                        :won => false
+                    }
+                    $user.bet_history.push(betslip)
+                    $user.account_balance -= betslip[:wager]
+                end 
+                if fighting(fight[:fighter_1], fight[:fighter_2]) == betslip[:fighter_selected]
+                    $user.account_balance += (betslip[:wager] * betslip[:odds])     #this updates the account balance if they won. 
+                    $user.bet_history[betslip[:id]][:won] = true    #this updates the won key to true if they won 
+                    $fight_card.delete_at(fight[:fight_card_index])  #deletes the relevant $fight_card array. 
+                end 
+                $fight_card.delete_at(fight[:fight_card_index])
+                puts "account balance: #{$user.account_balance}. bet_history/betslip won #{$user.bet_history[betslip[:id]][:won]}. fight card size: #{$fight_card.size}"
+            end 
         end 
-        if fighting(fight[:fighter_1], fight[:fighter_2]) == betslip[:fighter_selected]
-            $user.account_balance += (betslip[:wager] * betslip[:odds])     #this updates the account balance if they won. 
-            $user.bet_history[betslip[:id]][:won] = true    #this updates the won key to true if they won 
-            $fight_card.delete_at(fight[:fight_card_index])  #deletes the relevant $fight_card array. 
-        end 
-        $fight_card.delete_at(fight[:fight_card_index])
-        puts "account balance: #{$user.account_balance}. bet_history/betslip won #{$user.bet_history[betslip[:id]][:won]}. fight card size: #{$fight_card.size}"
     end         
 end 
 
