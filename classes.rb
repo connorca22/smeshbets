@@ -16,11 +16,10 @@ class Fighter
         @fight_complete = false 
         @damage = 0
     end 
-
+    
     def set_fighter_score 
         @fighter_score = @grappling_score +  @striking_score + @power_score
     end 
-
 end 
 
 
