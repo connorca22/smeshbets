@@ -3,22 +3,29 @@ require "faker"
 require "tty-prompt"
 
 class Fighter
-    attr_accessor :fight_complete, :damage 
-    attr_reader :first_name, :last_name, :grappling_score, :striking_score, :power_score
+    attr_reader :first_name, :last_name, :grappling_score, :striking_score, :power_score, :full_name
+    attr_accessor :fight_complete, :damage, :fighter_score
     def initialize 
         @first_name = Faker::Name.male_first_name
         @last_name = Faker::Name.last_name
-        @grappling_score = Faker::Number.within(range: 5.0..10.0)
-        @striking_score = Faker::Number.within(range: 5.0..10.0)
-        @power_score = Faker::Number.within(range: 5.0..10.0)
+        @full_name = "#{@first_name} #{@last_name}" 
+        @grappling_score = Faker::Number.within(range: 4.0..10.0)
+        @striking_score = Faker::Number.within(range: 4.0..10.0)
+        @power_score = Faker::Number.within(range: 4.0..10.0)
+        @fighter_score = 0.0 
         @fight_complete = false 
         @damage = 0
     end 
+
+    def set_fighter_score 
+        @fighter_score = @grappling_score +  @striking_score + @power_score
+    end 
+
 end 
 
 
 class User
-    attr_reader :first_name, :last_name, :phone_number, :account_balance, :credit_card 
+    attr_reader :first_name, :last_name, :phone_number, :account_balance, :credit_card
     def initialize(f_name, l_name, phone_no) 
         @first_name =  f_name
         @last_name =  l_name
@@ -58,7 +65,8 @@ class User
             cvv = cvv.to_i
             @credit_card[2] = cvv
         end
-        @account_balance = deposit_amount        
+        @account_balance = deposit_amount
+        puts "Transaction successful. #{deposit_amount} added to account balance."        
     end 
 
     #lets users withdraw money from their account. Gets float as withdraw value & exits once they've withdrawn, or if they've requested more than they have, or if their account balance is $0. 
@@ -76,20 +84,9 @@ class User
             puts "You cannot withdraw $0 from your account balance."
         else
             @account_balance -= withdraw_value
-            puts "We have transferred $#{withdraw_value} to the pay id associated with the phone number #{@phone_number}. Your remaining account balance is #{@account_balance}."
+            puts "We have transferred $#{withdraw_value} to the pay id associated with the phone number #{@phone_number}. Your remaining account balance is $#{@account_balance}."
         end
            
     end 
 
 end 
-
-
-user = User.new("Connor", "Roberts", "0407263456")
-user.deposit 
-user.cash_out
-
-
-
-
-
-    
