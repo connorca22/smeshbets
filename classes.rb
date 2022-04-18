@@ -9,11 +9,10 @@ class Fighter
         @first_name = Faker::Name.male_first_name
         @last_name = Faker::Name.last_name
         @full_name = "#{@first_name} #{@last_name}" 
-        @grappling_score = Faker::Number.within(range: 4.0..10.0)
-        @striking_score = Faker::Number.within(range: 4.0..10.0)
-        @power_score = Faker::Number.within(range: 4.0..10.0)
+        @grappling_score = Faker::Number.within(range: 3.0..10.0)
+        @striking_score = Faker::Number.within(range: 3.0..10.0)
+        @power_score = Faker::Number.within(range: 3.0..10.0)
         @fighter_score = 0.0 
-        @fight_complete = false 
         @damage = 0
     end 
 
