@@ -18,3 +18,6 @@ phone_number = prompt.ask("Please enter a 10 digit mobile number beginning with 
 phone_number = check_phone(phone_number)
 
 $user = User.new(first_name, last_name, phone_number)
+
+#Creates all fighters 
+$fight_card = [[Fighter.new, Fighter.new], [Fighter.new, Fighter.new], [Fighter.new, Fighter.new], [Fighter.new, Fighter.new], [Fighter.new, Fighter.new]]
