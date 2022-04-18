@@ -77,8 +77,10 @@ def place_bet
         #identifies the user's choice and stores their choice in fight hash. 
         if fighter_choice == 1 
             fight[:fighter_selection] = fight[:fighter_1]
+            fight[:fighter_selection_odds] = fight[:fighter_1_odds]
         elsif fighter_choice == 2 
             fight[:fighter_selection] = fight[:fighter_2]
+            fight[:fighter_selection_odds] = fight[:fighter_2_odds]
         end 
 
         #requests wager amount, if it exceeds account balance or is outside of the valid range it will exit back to start menu
@@ -92,10 +94,30 @@ def place_bet
         elsif wager_amount > 10000 || wager_amount < 1 
             puts "You can only place bets between $1 and $10,000"
         else 
-            #onto rest of program 
+            betslip = {
+                :id => $user.bet_history.size, 
+                :fighter_selected => fight[:fighter_selection],
+                :wager => wager_amount,
+                :odds => fight[:fighter_selection_odds],
+                :won => false
+            }
+            $user.bet_history.push(betslip)
+            $user.account_balance -= betslip[:wager]
         end 
-        
+        if fighting(fight[:fighter_1], fight[:fighter_2]) == betslip[:fighter_selected]
+            $user.account_balance += (betslip[:wager] * betslip[:odds])     #this updates the account balance if they won. 
+            $user.bet_history[betslip[:id]][:won] = true    #this updates the won key to true if they won 
+            $fight_card.delete_at(fight[:fight_card_index])  #deletes the relevant $fight_card array. 
+        end 
+        $fight_card.delete_at(fight[:fight_card_index])
+        puts "account balance: #{$user.account_balance}. bet_history/betslip won #{$user.bet_history[betslip[:id]][:won]}. fight card size: #{$fight_card.size}"
     end         
 end 
 
+
+
+
+def fighting(fighter_1, fighter_2)
+    return fighter_1
+end 
 
