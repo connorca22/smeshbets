@@ -37,19 +37,22 @@ def generate_odds(range, fighter_score)
 end 
 
 def place_bet 
-
-    if $user.account_balance == 0 
-        puts "You have no credit on your account. Please make a deposit to place a bet." 
+    #identifies if user account balance is insufficient, or if there are no fights and exits. 
+    if $user.account_balance < 1.0 
+        puts "You do not have sufficient credit on your account. Please make a deposit to place a bet." 
     elsif $fight_card.size == 0 
         puts "There are no upcoming fights to place bets on."
     else  
+        #creates fight options to pass to tty prompt based on contents of $fight_card 
         fight_options = []
         $fight_card.each do |i| 
             fight_options.push("#{i[0].full_name} VS #{i[1].full_name}")  
-
+        end 
         prompt = TTY::Prompt.new
         fight_select = prompt.select("Which upcoming fight would you like to bet on?", [fight_options, "Back"])
         
+        #creates a fight hash which will store the selected fighters, their odds, and their index in $fight_card.
+        #then populates it with relevant data based on user's fight_select pick 
         fight =  {} 
         counter = 0 
         while counter < $fight_card.size      
@@ -63,5 +66,36 @@ def place_bet
             end 
             counter += 1 
         end 
+
+        #creates a hash that we'll pass to tty prompt object to choose between the two fighters
+        fighter_options = [
+            {name: "#{fight[:fighter_1].full_name} at #{fight[:fighter_1_odds]} to 1", value: 1},
+            {name: "#{fight[:fighter_2].full_name} at #{fight[:fighter_2_odds]} to 1", value: 2}
+        ] 
+        fighter_choice = prompt.select("Which upcoming fight would you like to bet on?", [fighter_options, "Back"])  
+        
+        #identifies the user's choice and stores their choice in fight hash. 
+        if fighter_choice == 1 
+            fight[:fighter_selection] = fight[:fighter_1]
+        elsif fighter_choice == 2 
+            fight[:fighter_selection] = fight[:fighter_2]
+        end 
+
+        #requests wager amount, if it exceeds account balance or is outside of the valid range it will exit back to start menu
+        #otherwise if will continue execution in a nested if statement. 
+        wager_amount = prompt.ask("Enter dollar value of bet between $1 and $10,000", convert: :float) do |q|
+            q.convert(:float, "%{value} is not a valid bet amount. Please enter a dollar value of bet using only numbers")
+        end
+
+        if wager_amount > $user.account_balance 
+            puts "You do not have sufficient funds in your account to place this bet"
+        elsif wager_amount > 10000 || wager_amount < 1 
+            puts "You can only place bets between $1 and $10,000"
+        else 
+            #onto rest of program 
+        end 
+        
     end         
 end 
+
+
