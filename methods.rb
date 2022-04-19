@@ -92,6 +92,7 @@ def place_bet
                 #otherwise if will continue execution in a nested if statement. 
                 wager_amount = prompt.ask("Enter dollar value of bet between $1 and $10,000", convert: :float) do |q|
                     q.convert(:float, "%{value} is not a valid bet amount. Please enter a dollar value of bet using only numbers")
+                    q.required true
                 end
 
                 if wager_amount > $user.account_balance 
@@ -126,18 +127,17 @@ end
 
 
 def fighting(fighter_1, fighter_2, fighter_selected)
-    random = rand(0.8..1.4)
-    fighter_1_chance_score = fighter_1.fighter_score * random 
-    fighter_2_chance_score = fighter_2.fighter_score * random 
+    fighter_1_chance_score = fighter_1.fighter_score * rand(0.6..1.0)
+    fighter_2_chance_score = fighter_2.fighter_score * rand(0.6..1.0)
 
     fighter_1_chance_score > fighter_2_chance_score ? winner = fighter_1 : winner = fighter_2
     fighter_1_chance_score > fighter_2_chance_score ? loser = fighter_2 : loser = fighter_1  
     sleep(2)
     if winner == fighter_selected 
-        puts "#{fighter_selected.full_name} won the fight! You've won your bet!".colorize(:green)
+        puts "#{fighter_selected.full_name} won the fight! You won your bet!".colorize(:green)
         return winner 
     else 
-        puts "#{fighter_selected.full_name} lost the fight. You've lost your bet".colorize(:red)
+        puts "#{fighter_selected.full_name} lost the fight. You lost your bet.".colorize(:red)
         return winner
     end 
 end 
