@@ -4,8 +4,7 @@ require "tty-font"
 
 #writes app name in stylised writing 
 font = TTY::Font.new(:doom)
-puts font.write("WELCOME TO")
-puts font.write("SMESH BETS")
+puts font.write("WELCOME   TO   SMESH   BETS")
 
 #requests user data then creates new user from User class
 prompt = TTY::Prompt.new
@@ -30,10 +29,11 @@ end
 
 
 #home menu 
-
+system("clear")
 program_active = true 
+puts "What would you like to do?"
 while program_active 
-home_menu_select = prompt.select("What would you like to do?", ["Place Bet", "Deposit Funds", "Withdraw Funds", "Exit"]) 
+home_menu_select = prompt.select("", ["Place Bet", "Deposit Funds", "Withdraw Funds", "Exit"]) 
     if home_menu_select == "Place Bet"
         place_bet 
     elsif home_menu_select == "Deposit Funds"
@@ -42,6 +42,7 @@ home_menu_select = prompt.select("What would you like to do?", ["Place Bet", "De
         $user.cash_out 
     elsif home_menu_select == "Exit"
         program_active = false 
+        system("clear")
         puts font.write("GOODBYE")
     end 
 end 

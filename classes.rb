@@ -4,7 +4,7 @@ require "tty-prompt"
 
 class Fighter
     attr_reader :first_name, :last_name, :grappling_score, :striking_score, :power_score, :full_name
-    attr_accessor :fight_complete, :damage, :fighter_score
+    attr_accessor :damage, :fighter_score
     def initialize 
         @first_name = Faker::Name.male_first_name
         @last_name = Faker::Name.last_name
@@ -18,6 +18,7 @@ class Fighter
 
     def set_fighter_score 
         @fighter_score = @grappling_score +  @striking_score + @power_score
+        return @fighter_score
     end 
 end 
 
@@ -39,6 +40,7 @@ class User
             puts "Please enter a valid #{digits} digit number"
             number = gets.gsub(/\s+/, "")
         end
+        return number 
     end
 
     def deposit
@@ -66,6 +68,7 @@ class User
             @credit_card[2] = cvv
         end
         @account_balance += deposit_amount
+        system("clear")
         puts "Transaction successful. #{deposit_amount} deposited. Your account balance is #{@account_balance}"        
     end 
 
@@ -77,17 +80,20 @@ class User
         end
             
         if @account_balance == 0
+            system("clear")
             puts "Your account balance is $0. You cannot withdraw funds."
         elsif withdraw_value > @account_balance
+            system("clear")
             puts "Your requested cash out value of #{withdraw_value} is greater than your account value."
         elsif withdraw_value == 0.0 
+            system("clear")
             puts "You cannot withdraw $0 from your account balance."
         else
             @account_balance -= withdraw_value
+            system("clear")
             puts "We have transferred $#{withdraw_value} to the pay id associated with the phone number #{@phone_number}. Your remaining account balance is $#{@account_balance}."
         end
            
     end 
 
 end 
-

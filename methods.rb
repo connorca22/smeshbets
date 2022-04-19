@@ -39,8 +39,10 @@ end
 def place_bet 
     #identifies if user account balance is insufficient, or if there are no fights and exits. 
     if $user.account_balance < 1.0 
+        system("clear")
         puts "You do not have sufficient credit on your account. Please make a deposit to place a bet." 
     elsif $fight_card.size == 0 
+        system("clear")
         puts "There are no upcoming fights to place bets on."
     else  
         #creates fight options to pass to tty prompt based on contents of $fight_card 
@@ -50,6 +52,7 @@ def place_bet
         end 
         prompt = TTY::Prompt.new
         fight_select = prompt.select("Which upcoming fight would you like to bet on?", [fight_options, "Back"])
+        system("clear")
         if fight_select == "Back"
             return 
         else  
@@ -77,6 +80,7 @@ def place_bet
             fighter_choice = prompt.select("Which upcoming fight would you like to bet on?", [fighter_options, "Back"])  
             
             if fighter_choice == "Back"
+                system("clear")
                 return 
             else 
                 #identifies the user's choice and stores their choice in fight hash. 
@@ -96,8 +100,10 @@ def place_bet
                 end
 
                 if wager_amount > $user.account_balance 
+                    system("clear")
                     puts "You do not have sufficient funds in your account to place this bet"
                 elsif wager_amount > 10000 || wager_amount < 1 
+                    system("clear")
                     puts "You can only place bets between $1 and $10,000"
                 else 
                     betslip = {
@@ -115,8 +121,7 @@ def place_bet
                         $user.bet_history[betslip[:id]][:won] = true    #this updates the won key to true if they won 
                     end 
                     $fight_card.delete_at(fight[:fight_card_index])   #deletes the relevant $fight_card array. 
-                    sleep(2)
-                    puts "account balance: #{$user.account_balance}. bet_history/betslip won #{$user.bet_history[betslip[:id]][:won]}. fight card size: #{$fight_card.size}"
+                    puts "Your account balance: #{$user.account_balance}."
                 end 
             end 
         end 
