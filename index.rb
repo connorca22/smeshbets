@@ -28,7 +28,8 @@ $fight_card.each do |i|
     i[1].set_fighter_score
 end 
 
-#home menu - put below in a loop 
+
+#home menu 
 
 program_active = true 
 while program_active 
