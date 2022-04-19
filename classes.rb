@@ -65,8 +65,8 @@ class User
             cvv = cvv.to_i
             @credit_card[2] = cvv
         end
-        @account_balance = deposit_amount
-        puts "Transaction successful. #{deposit_amount} added to account balance."        
+        @account_balance += deposit_amount
+        puts "Transaction successful. #{deposit_amount} deposited. Your account balance is #{@account_balance}"        
     end 
 
     #lets users withdraw money from their account. Gets float as withdraw value & exits once they've withdrawn, or if they've requested more than they have, or if their account balance is $0. 
@@ -90,3 +90,4 @@ class User
     end 
 
 end 
+
