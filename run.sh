@@ -9,4 +9,4 @@ bundle install
 clear
 
 #run the application 
-ruby src/index.rb
+ruby src/index.rb "Connor" "Roberts" "0407262636" 
