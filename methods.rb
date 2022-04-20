@@ -77,7 +77,7 @@ def place_bet
                 {name: "#{fight[:fighter_1].full_name} at #{fight[:fighter_1_odds]} to 1", value: 1},
                 {name: "#{fight[:fighter_2].full_name} at #{fight[:fighter_2_odds]} to 1", value: 2}
             ] 
-            fighter_choice = prompt.select("Which upcoming fight would you like to bet on?", [fighter_options, "Back"])  
+            fighter_choice = prompt.select("Which fighter would you like to bet on?", [fighter_options, "Back"])  
             
             if fighter_choice == "Back"
                 system("clear")

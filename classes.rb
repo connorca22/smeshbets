@@ -72,7 +72,8 @@ class User
         puts "Transaction successful. #{deposit_amount} deposited. Your account balance is #{@account_balance}"        
     end 
 
-    #lets users withdraw money from their account. Gets float as withdraw value & exits once they've withdrawn, or if they've requested more than they have, or if their account balance is $0. 
+    #lets users withdraw money from their account. Gets float as withdraw value & exits once they've withdrawn, 
+    #or if they've requested more than they have, or if their account balance is $0. 
     def cash_out
         prompt = TTY::Prompt.new
         withdraw_value = prompt.ask("How much would you like to withdraw? Enter a number.", convert: :float, required: true) do |q|
@@ -91,7 +92,8 @@ class User
         else
             @account_balance -= withdraw_value
             system("clear")
-            puts "We have transferred $#{withdraw_value} to the pay id associated with the phone number #{@phone_number}. Your remaining account balance is $#{@account_balance}."
+            puts "We have transferred $#{withdraw_value} to the pay id associated with the phone number #{@phone_number}."  
+            puts "Your remaining account balance is $#{@account_balance}" 
         end
            
     end 

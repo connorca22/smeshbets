@@ -4,7 +4,8 @@ require "tty-font"
 
 #writes app name in stylised writing 
 font = TTY::Font.new(:doom)
-puts font.write("WELCOME   TO   SMESH   BETS")
+puts font.write("WELCOME TO")
+puts font.write("SMESH BETS")
 
 #requests user data then creates new user from User class
 prompt = TTY::Prompt.new
