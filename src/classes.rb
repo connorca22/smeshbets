@@ -38,7 +38,7 @@ class User
     def check_card(number, digits)
         while !number.count("^0-9").zero? || number.empty? || number.size != digits
             puts "Please enter a valid #{digits} digit number"
-            number = gets.gsub(/\s+/, "")
+            number = STDIN.gets.gsub(/\s+/, "")
         end
         return number 
     end
@@ -49,20 +49,20 @@ class User
            
             if @credit_card.length != 3
             puts "Please enter your 16 digit credit card number"
-            credit_card_no = gets.gsub(/\s+/, "")
+            credit_card_no = STDIN.gets.gsub(/\s+/, "")
             check_card(credit_card_no, 16)
             credit_card_no = credit_card_no.to_i
             @credit_card[0] = credit_card_no
 
             puts "Please enter your 4 digit expiry date"
-            expiry_date = gets.gsub(/\s+/, "")
+            expiry_date = STDIN.gets.gsub(/\s+/, "")
             check_card(expiry_date, 4)
             expiry_date = expiry_date.to_i
             @credit_card[1] = expiry_date
         #ideally would need to ensure that would print error if it was past expiry date. would need to figure out how to use current date. 
 
             puts "Please enter your 3 digit CVV"
-            cvv = gets.gsub(/\s+/, "")
+            cvv = STDIN.gets.gsub(/\s+/, "")
             check_card(cvv, 3)
             cvv = cvv.to_i
             @credit_card[2] = cvv

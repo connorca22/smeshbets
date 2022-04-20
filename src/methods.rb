@@ -6,7 +6,7 @@ def verify_name(name)
     while verified == false
         if !name.count("^a-zA-Z' \-").zero? || name.empty?
             puts "Please enter a valid name, using only letters, hyphens and apostrophes"
-            name = gets.strip
+            name = STDIN.gets.strip
         else 
             verified = true 
         end 
@@ -20,7 +20,7 @@ def check_phone(phone_number)
     while verified == false
         if !phone_number.count("^0-9").zero? || phone_number.empty? || phone_number.size != 10 || !phone_number.start_with?("04", "05")  
             puts "Please enter a valid 10 digit mobile phone number beginning with 04 or 05"
-            phone_number = gets.gsub(/\s+/, "")
+            phone_number = STDIN.gets.gsub(/\s+/, "")
         else
             verified = true
         end
