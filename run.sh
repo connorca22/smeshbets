@@ -9,4 +9,4 @@ bundle install
 clear
 
 #run the application 
-ruby index.rb
+ruby src/index.rb

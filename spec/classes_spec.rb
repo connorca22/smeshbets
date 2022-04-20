@@ -1,4 +1,4 @@
-require_relative "../classes.rb"
+require_relative "../src/classes.rb"
 
 describe "Fighter class: set_fighter_score method" do 
     let(:fighter) {Fighter.new}

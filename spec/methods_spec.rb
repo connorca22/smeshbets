@@ -1,5 +1,5 @@
-require_relative "../methods.rb"
-require_relative "../classes.rb"
+require_relative "../src/methods.rb"
+require_relative "../src/classes.rb"
 
 describe "verify_name" do 
     it "checks that the verify_name method is only returning strings that contain letters, spaces, hyphens and apostrophes" do
