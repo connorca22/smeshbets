@@ -98,10 +98,11 @@ chmod +x run.sh
 ```
 $ ./run.sh
 ```
-6. If you want to pass in your first name, last name, and phone number as strings like below. Note that you can only use letters, hyphens and apostrophes in the name strings, and you can only use a 10 digit number beginning with "04" or "05" in the phone number string.  
+6. Currently .sh file contains my first name, last name, and phone number as command line arguments. This bypasses the need to create a user account at the start of index.rb. If you would like to use your own details you can either remove the three command line arguments from the .sh file and input your own, or you can remove them and input your details when prompted in the app, or you can change directory into the src directory where the index.rb file is contained and pass your own first name, last name and phone number in as arguments like below. 
 ```
-./run.sh "Connor" "Roberts" "0407263354" 
+ruby index.rb "Connor" "Roberts" "0407263354" 
 ```
+NOTE: If you want to pass in your details like above, you can only use letters, hyphens and apostrophes in the name strings, and you can only use a 10 digit number beginning with "04" or "05" in the phone number string.  
 
 ### Dependencies required to operate
 Below Ruby gems are required for correct execution of the program. When the shell script is run it will install bundler, and will then install all dependencies listed below. 
