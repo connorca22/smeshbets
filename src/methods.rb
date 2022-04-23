@@ -140,7 +140,10 @@ end
 
 
 
-
+## fighting method takes two fighters, and the fighter that the user selected. It then determines the winner of the fight
+## by multiplying each fighter score by a random float between 0.6 - 1.0. This simulates random factors that influence
+## fight results. Method tells user whether they've won fight and colorizes the text red or green based on win/lose. 
+## returns winner to place_bet method. 
 def fighting(fighter_1, fighter_2, fighter_selected)
     fighter_1_chance_score = fighter_1.fighter_score * rand(0.6..1.0)
     fighter_2_chance_score = fighter_2.fighter_score * rand(0.6..1.0)
