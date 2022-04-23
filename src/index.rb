@@ -2,7 +2,7 @@ require_relative "classes.rb"
 require_relative "methods.rb"
 require "tty-font"
 
-#writes app name in stylised writing 
+#welcomes user to app with stylised writing 
 font = TTY::Font.new(:doom)
 puts font.write("WELCOME TO")
 puts font.write("SMESH BETS")
@@ -10,7 +10,7 @@ puts font.write("SMESH BETS")
 #create tty prompt object 
 prompt = TTY::Prompt.new
 
-#ARGV tests
+#If command line arguments are passed in, it confirms details with user.
 command_line_login = "No"
 
 if ARGV.size == 3 
@@ -19,6 +19,7 @@ if ARGV.size == 3
     puts "Phone: #{ARGV[2]}"
     command_line_login = prompt.select("Is this correct?", ["Yes", "No"])
 
+#if command line arguments are correct it saves them to variables relevant to creation of user with User class, and used verify_name & check_phone method to verify data. 
     if command_line_login == "Yes"
         first_name = ARGV[0] if ARGV[0]
         last_name = ARGV[1] if ARGV[1]
@@ -30,6 +31,7 @@ if ARGV.size == 3
     end 
 end 
 
+#if command line arguments are incorrect, or 3 aren't provided, then it prompts user for their details and runs the same verification methods as above. 
 if command_line_login == "No"
     system("clear")
     puts "Please enter your details to register an account"
@@ -41,6 +43,7 @@ if command_line_login == "No"
     phone_number = check_phone(phone_number)
 end 
 
+#creates $user object from User class using the user's details. 
 $user = User.new(first_name, last_name, phone_number)
 
 system("clear")
@@ -57,7 +60,7 @@ $fight_card.each do |i|
 end 
 
 
-#home menu 
+#home menu - will repeat until user exits program.
 system("clear")
 program_active = true 
 puts "What would you like to do?"
