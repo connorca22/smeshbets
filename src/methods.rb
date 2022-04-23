@@ -1,31 +1,28 @@
 require "colorize"
+require_relative "classes.rb"
 
 # checks if name input provided is an empty string, or if it's got characters that aren't letters, hyphens, apostrophes, spaces. 
 def verify_name(name) 
-    verified = false  
-    while verified == false
-        if !name.count("^a-zA-Z' \-").zero? || name.empty?
-            puts "Please enter a valid name, using only letters, hyphens and apostrophes"
-            name = STDIN.gets.strip
-        else 
-            verified = true 
-        end 
+    begin 
+    raise InvalidCharacters if !name.count("^a-zA-Z' \-").zero? || name.empty? 
+    rescue InvalidCharacters
+        puts "Please enter a valid name, using only letters, hyphens and apostrophes"
+        name = STDIN.gets.strip
+        retry
     end 
-    name 
+    return name 
 end 
 
 # checks whether the phone number is a valid mobile number
 def check_phone(phone_number) 
-    verified = false
-    while verified == false
-        if !phone_number.count("^0-9").zero? || phone_number.empty? || phone_number.size != 10 || !phone_number.start_with?("04", "05")  
-            puts "Please enter a valid 10 digit mobile phone number beginning with 04 or 05"
-            phone_number = STDIN.gets.gsub(/\s+/, "")
-        else
-            verified = true
-        end
-    end
-    phone_number
+    begin 
+        raise PhoneInvalid if !phone_number.count("^0-9").zero? || phone_number.empty? || phone_number.size != 10 || !phone_number.start_with?("04", "05")
+    rescue PhoneInvalid
+        puts "Please enter a valid 10 digit mobile phone number beginning with 04 or 05"
+        phone_number = STDIN.gets.gsub(/\s+/, "")
+        retry 
+    end 
+    return phone_number
 end
 
 ## generate_odds is passed a range (fighter_1.fighter_score + fighter_2.fighter_score), and a single fighter's fighter score
