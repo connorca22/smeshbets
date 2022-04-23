@@ -11,15 +11,27 @@ puts font.write("SMESH BETS")
 prompt = TTY::Prompt.new
 
 #ARGV tests
+command_line_login = "No"
+
 if ARGV.size == 3 
-    first_name = ARGV[0] if ARGV[0]
-    last_name = ARGV[1] if ARGV[1]
-    phone_number = ARGV[2] if ARGV[2]
-    first_name = verify_name(first_name)
-    last_name = verify_name(last_name)
-    phone_number = check_phone(phone_number)
-else 
-#requests user data then creates new user from User class
+    puts "You have provided the following account details:" 
+    puts "Name: #{ARGV[0]} #{ARGV[1]}"
+    puts "Phone: #{ARGV[2]}"
+    command_line_login = prompt.select("Is this correct?", ["Yes", "No"])
+
+    if command_line_login == "Yes"
+        first_name = ARGV[0] if ARGV[0]
+        last_name = ARGV[1] if ARGV[1]
+        phone_number = ARGV[2] if ARGV[2]
+        first_name = verify_name(first_name)
+        last_name = verify_name(last_name)
+        phone_number = check_phone(phone_number)
+        system("clear")
+    end 
+end 
+
+if command_line_login == "No"
+    system("clear")
     puts "Please enter your details to register an account"
     first_name = prompt.ask("What is your first name?", required: true)
     first_name = verify_name(first_name)
@@ -31,6 +43,7 @@ end
 
 $user = User.new(first_name, last_name, phone_number)
 
+system("clear")
 puts "Welcome #{$user.first_name}!"
 sleep(2)
 
