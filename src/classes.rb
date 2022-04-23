@@ -64,13 +64,17 @@ class User
         return number 
     end 
 
-    ## requests deposit amount with TTY prompt. If credit card details are already saved, then it updates the user account
-    ## balance and alerts the user of the success. Otherwise it requests card number, expiry, cvv & verifies the inputs 
-    ## with the check_card method. 
     def deposit
-            prompt = TTY::Prompt.new
-            deposit_amount = prompt.select("Please enter deposit amount", ["5", "10", "20", "35", "50", "75", "100"]).to_f
-           
+        prompt = TTY::Prompt.new
+        deposit_amount = 0 
+        
+        while deposit_amount > 5000 || deposit_amount < 5
+            deposit_amount = prompt.ask("Please enter a deposit amount between $5 and $5,000", convert: :float, required: true) do |q|
+            q.convert(:float, "%{value} is not a valid withdrawal amount. Please enter a number between $5 and $5,000.")
+            end  
+        end 
+    
+        deposit_amount = deposit_amount.round(2)
             if @credit_card.length != 3
             puts "Please enter your 16 digit credit card number"
             credit_card_no = STDIN.gets.gsub(/\s+/, "")
@@ -92,7 +96,7 @@ class User
         end
         @account_balance += deposit_amount
         system("clear")
-        puts "Transaction successful. #{deposit_amount} deposited. Your account balance is #{@account_balance}"        
+        puts "Transaction successful. $#{deposit_amount} deposited. Your account balance is $#{@account_balance}"        
     end 
 
     ## lets users withdraw money from their account. Exits if account_balance is $0. Otherwise gets a withdraw value. If they've requested
