@@ -121,7 +121,7 @@ def place_bet
                         $user.bet_history[betslip[:id]][:won] = true    #this updates the won key to true if they won 
                     end 
                     $fight_card.delete_at(fight[:fight_card_index])   #deletes the relevant $fight_card array. 
-                    puts "Your account balance: #{$user.account_balance}."
+                    puts "Your account balance: #{$user.account_balance.round(2)}."
                 end 
             end 
         end 

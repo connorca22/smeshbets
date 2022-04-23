@@ -75,27 +75,31 @@ class User
     #lets users withdraw money from their account. Gets float as withdraw value & exits once they've withdrawn, 
     #or if they've requested more than they have, or if their account balance is $0. 
     def cash_out
-        prompt = TTY::Prompt.new
-        withdraw_value = prompt.ask("How much would you like to withdraw? Enter a number.", convert: :float, required: true) do |q|
-            q.convert(:float, "%{value} is not a valid withdrawal amount. Please enter a number.")
-        end
-            
         if @account_balance == 0
             system("clear")
-            puts "Your account balance is $0. You cannot withdraw funds."
-        elsif withdraw_value > @account_balance
-            system("clear")
-            puts "Your requested cash out value of #{withdraw_value} is greater than your account value."
-        elsif withdraw_value == 0.0 
-            system("clear")
-            puts "You cannot withdraw $0 from your account balance."
+            puts "Your account balance is $0. You cannot withdraw funds." 
         else
-            @account_balance -= withdraw_value
-            system("clear")
-            puts "We have transferred $#{withdraw_value} to the pay id associated with the phone number #{@phone_number}."  
-            puts "Your remaining account balance is $#{@account_balance}" 
-        end
-           
+            prompt = TTY::Prompt.new
+            puts "Your account balance is #{@account_balance.round(2)}"
+            withdraw_value = prompt.ask("How much would you like to withdraw? Enter a number.", convert: :float, required: true) do |q|
+            q.convert(:float, "%{value} is not a valid withdrawal amount. Please enter a number.")
+            end 
+            
+            withdraw_value = withdraw_value.round(2) 
+
+            if withdraw_value > @account_balance
+                system("clear")
+                puts "Your requested cash out value of #{withdraw_value} is greater than your account value."
+            elsif withdraw_value < 1  
+                system("clear")
+                puts "You cannot withdraw less than $1 from your account balance."
+            else
+                @account_balance -= withdraw_value
+                system("clear")
+                puts "We have transferred $#{withdraw_value} to the pay id associated with the phone number #{@phone_number}."  
+                puts "Your remaining account balance is $#{@account_balance.round(2)}" 
+            end
+        end    
     end 
 
 end 
